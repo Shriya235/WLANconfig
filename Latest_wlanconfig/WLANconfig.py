@@ -6,7 +6,7 @@ from itertools import chain
 from collections import Counter
 from  datetime import datetime
 
-def graphs(x,y,title,yaxis):
+def graphs(x,y,title,yaxis):                                            #plots data over time
     ax=plt.gca()
     xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
     ax.xaxis.set_major_formatter(xfmt)
@@ -18,7 +18,7 @@ def graphs(x,y,title,yaxis):
     plt.show()                                                             
     plt.savefig('.png')   
 
-def dataspecific(catch_start, catch_end,logfile,inter):
+def dataspecific(catch_start, catch_end,logfile,inter):                 #extracts required data, processes and sends it for plotting
     results = []
     mac =[]
     m=[]
@@ -56,14 +56,14 @@ def dataspecific(catch_start, catch_end,logfile,inter):
     for temp in tim:
         date_obj.append(datetime.strptime(temp, '%Y-%m-%d %H:%M:%S.%f'))
     dates = md.date2num(date_obj)
-    length=len(singlelist[0::29])
+    length=len(singlelist[0::29])                                 #length gives the no. of clients connected to ath interface
     s = Counter(singlelist[0::29])
     for uniquemac in s:
-        uniq.append(uniquemac)
+        uniq.append(uniquemac)                                     #uniq : list of unique clients connected to ath interface
         c.append(s[uniquemac])
     for x in c:
         percent= (x/t)*100
-        per.append(percent)
+        per.append(percent)                                      #per : list of % duration of unique clients connected to ath interface
     no_of_clients = Counter(dates)
     for client in no_of_clients:
         time1.append(client)
@@ -76,7 +76,7 @@ def dataspecific(catch_start, catch_end,logfile,inter):
     graphs(dates,singlelist[0::29],"wlanconfig "+inter+" list sta","Mac Address")
     graphs(time1,clients_no,"No. of clients connected to "+inter+" over time","No. of clients")
 
-def Call_dataspecific(interface_list,fname):
+def Call_dataspecific(interface_list,fname):                        #interface_list takes the values from config
   for interface in interface_list:
      dataspecific("root@RBR850:/# wlanconfig "+interface+" list sta",  "root@RBR850:/# ",fname,interface)
 
